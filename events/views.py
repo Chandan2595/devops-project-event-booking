@@ -103,8 +103,7 @@ def add_events(request): # pylint: disable=missing-function-docstring
         return redirect("events")
     return render(request, "events/add_events.html", {})
 
-
-def edit_events(request, event_id): # pylint: disable=missing-function-docstring
+def edit_events(request, event_id):  # pylint: disable=missing-function-docstring
     event = get_object_or_404(Event, pk=event_id)
     if request.method == "POST":
         event.title = request.POST.get("title")
@@ -115,7 +114,7 @@ def edit_events(request, event_id): # pylint: disable=missing-function-docstring
         event.save()
         messages.success(request, "Edit Event Successful!")
         return redirect("events")
-
+    return render(request, "events/edit_events.html", {"event": event})
 
 def cancel_events(request, event_id): # pylint: disable=missing-function-docstring
     event = get_object_or_404(Event, pk=event_id)
