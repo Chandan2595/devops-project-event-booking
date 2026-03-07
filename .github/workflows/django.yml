@@ -59,9 +59,6 @@ jobs:
           pip install -r requirements.txt
           pip install pylint coverage
 
-      # -------------------------
-      # Pylint full project linting
-      # -------------------------
       - name: Run Pylint
         continue-on-error: true
         run: |
@@ -71,9 +68,7 @@ jobs:
         run: |
           coverage run --source='.' manage.py test  # Add --source flag
           coverage xml -i  # -i ignores errors
-      # -------------------------
-      # Sonar Cloud Scan
-      # -------------------------
+
 
       - name: Install Sonar Scanner
         run: |
@@ -88,9 +83,9 @@ jobs:
 
       - name: Run Sonar Cloud Scan
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-          SONAR_ORG: ${{ secrets.SONAR_ORG }}
+          SONAR_TOKEN: d7c1e84f677452db54e9eaa4335fa37301a12c0f
+          SONAR_PROJECT_KEY: Chandan2595_devops-project-event-booking
+          SONAR_ORG: chandan2595
         run: |
           sonar-scanner \
             -Dsonar.login=$SONAR_TOKEN \
