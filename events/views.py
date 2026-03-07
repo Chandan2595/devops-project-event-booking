@@ -9,7 +9,7 @@ from django.contrib import messages
 from events.models import Event, Participant
 from django.contrib.auth.forms import AuthenticationForm
 
-def register_view(request): # pylint: disable=missing-function-docstring
+def register_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():

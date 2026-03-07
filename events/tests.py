@@ -1,3 +1,7 @@
+"""Tests for Event Management application."""
+
+# pylint: disable=no-member
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -6,8 +10,10 @@ from events.models import Event, Participant
 
 
 class EventModelTest(TestCase):
+    """Test cases for Event model."""
 
     def setUp(self):
+        """Set up test data."""
         self.user = User.objects.create_user(
             username="testuser",
             password="password123"
@@ -23,18 +29,20 @@ class EventModelTest(TestCase):
         )
 
     def test_event_creation(self):
-        """Test event creation"""
+        """Test event creation."""
         self.assertEqual(self.event.title, "Test Event")
         self.assertEqual(self.event.location, "Test Location")
 
     def test_event_string(self):
-        """Test event string representation"""
+        """Test event string representation."""
         self.assertEqual(str(self.event), "Test Event")
 
 
 class ParticipantModelTest(TestCase):
+    """Test cases for Participant model."""
 
     def test_participant_creation(self):
+        """Test participant creation."""
         participant = Participant.objects.create(
             name="John Doe",
             email="john@example.com"
@@ -45,9 +53,10 @@ class ParticipantModelTest(TestCase):
 
 
 class EventViewTest(TestCase):
+    """Test cases for event views."""
 
     def setUp(self):
-
+        """Set up client and test data."""
         self.client = Client()
 
         self.user = User.objects.create_user(
@@ -65,20 +74,21 @@ class EventViewTest(TestCase):
         )
 
     def test_events_page(self):
-        """Test events list page"""
+        """Test events list page."""
         response = self.client.get(reverse("events"))
         self.assertEqual(response.status_code, 200)
 
     def test_event_detail_page(self):
-        """Test view single event"""
+        """Test viewing a single event."""
         response = self.client.get(reverse("view_events", args=[self.event.id]))
         self.assertEqual(response.status_code, 200)
 
 
 class AuthenticationTest(TestCase):
+    """Test authentication views."""
 
     def setUp(self):
-
+        """Create test client and user."""
         self.client = Client()
 
         self.user = User.objects.create_user(
@@ -87,8 +97,7 @@ class AuthenticationTest(TestCase):
         )
 
     def test_register_view(self):
-        """Test user registration"""
-
+        """Test user registration."""
         response = self.client.post(
             reverse("register"),
             {
@@ -101,8 +110,7 @@ class AuthenticationTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_login_view(self):
-        """Test login"""
-
+        """Test login functionality."""
         response = self.client.post(
             reverse("login"),
             {
@@ -114,10 +122,10 @@ class AuthenticationTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_logout_view(self):
-        """Test logout"""
-
+        """Test logout functionality."""
         self.client.login(username="testuser", password="password123")
 
         response = self.client.get(reverse("logout"))
 
         self.assertEqual(response.status_code, 302)
+        
