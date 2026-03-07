@@ -70,7 +70,7 @@ jobs:
       - name: Run Pylint
         continue-on-error: true
         run: |
-          pylint main --ignore=migrations || true
+          pylint events --ignore=migrations || true
 
       # -------------------------
       # Django Unit Tests
@@ -83,7 +83,6 @@ jobs:
         run: |
           coverage run --source='.' manage.py test  # Add --source flag
           coverage xml -i  # -i ignores errors
-
       # -------------------------
       # Sonar Cloud Scan
       # -------------------------
