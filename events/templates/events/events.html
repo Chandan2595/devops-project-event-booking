@@ -1,0 +1,130 @@
+{% extends "events/layout.html" %}
+{% block title %}BookMyEvent — Upcoming Events{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section style="
+  min-height: 92vh;
+  background: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1920&q=85') center/cover no-repeat;
+  position: relative; display: flex; align-items: center;
+">
+  <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.92) 0%,rgba(255,255,255,0.65) 55%,rgba(255,255,255,0.3) 100%);"></div>
+
+  <div style="position:relative;z-index:1;padding:0 60px;max-width:700px;">
+    <div class="eb-badge" style="margin-bottom:28px;">
+      <span class="eb-badge-dot"></span> Live Events
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:700;line-height:1.05;color:#1e3a5f;margin-bottom:20px;">
+      Discover<br>
+      <em style="color:#c47c2a;font-style:italic;">Unforgettable</em><br>
+      Experiences
+    </h1>
+    <p style="font-size:1rem;color:#3d5a80;line-height:1.75;margin-bottom:40px;max-width:420px;">
+      Find and register for the best upcoming events in your community — from conferences to cultural celebrations.
+    </p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+      {% if user.is_authenticated %}
+      <a href="{% url 'add_events' %}" class="eb-btn-primary" style="padding:14px 32px;font-size:0.9rem;">
+        <i class="bi bi-plus-lg"></i> Create an Event
+      </a>
+      {% else %}
+      <a href="{% url 'login' %}" class="eb-btn-primary" style="padding:14px 32px;font-size:0.9rem;">
+        <i class="bi bi-box-arrow-in-right"></i> Sign In to Create
+      </a>
+      {% endif %}
+      <a href="#events" class="eb-btn-outline" style="padding:13px 28px;font-size:0.9rem;">
+        Browse Events <i class="bi bi-arrow-down"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Floating stat cards -->
+  <div style="position:absolute;right:60px;bottom:60px;display:flex;gap:14px;flex-wrap:wrap;" class="d-none d-lg-flex">
+    <div style="background:rgba(255,255,255,0.92);backdrop-filter:blur(10px);border:1.5px solid rgba(30,58,95,0.1);border-radius:12px;padding:20px 28px;box-shadow:0 4px 24px rgba(30,58,95,0.1);">
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#1e3a5f;">{{ events|length }}</div>
+      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#7a90a8;margin-top:4px;">Events Available</div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS LIST -->
+<section id="events" style="background:var(--cream);">
+  <div class="eb-section-header">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div>
+        <h2 class="eb-section-title">All <em>Upcoming</em> Events</h2>
+        <div class="eb-divider"></div>
+        <p style="font-size:0.87rem;color:var(--text-3);letter-spacing:0.02em;">Browse events and secure your spot today</p>
+      </div>
+      {% if user.is_authenticated %}
+      <a href="{% url 'add_events' %}" class="eb-btn-amber">
+        <i class="bi bi-plus-lg"></i> New Event
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="eb-events-list">
+    {% for event in events %}
+    <div class="eb-event-card">
+      <div class="eb-card-stripe"></div>
+      <div style="display:flex;align-items:stretch;">
+        <!-- Date block -->
+        <div style="width:100px;flex-shrink:0;background:var(--stone);border-right:1.5px solid var(--border-2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 10px;">
+          <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);">{{ event.date|date:"M" }}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--navy);line-height:1;">{{ event.date|date:"d" }}</div>
+          <div style="font-size:0.65rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);">{{ event.date|date:"Y" }}</div>
+        </div>
+        <!-- Content -->
+        <div class="eb-event-body">
+          <div class="eb-event-title">{{ event.title }}</div>
+          <div class="eb-event-meta">
+            <span><i class="bi bi-clock" style="color:var(--amber);"></i> {{ event.date|time:"g:i A" }}</span>
+            <span><i class="bi bi-geo-alt" style="color:var(--amber);"></i> {{ event.location }}</span>
+            <span><i class="bi bi-people" style="color:var(--amber);"></i> {{ event.num_participants }}/{{ event.max_participants }} seats</span>
+          </div>
+          {% if event.max_participants > 0 %}
+          <div class="eb-seat-bar" style="max-width:300px;">
+            <div class="eb-seat-fill" style="width:{% widthratio event.num_participants event.max_participants 100 %}%;"></div>
+          </div>
+          {% endif %}
+        </div>
+        <!-- Actions -->
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:10px;padding:20px 28px;border-left:1.5px solid var(--border-2);flex-shrink:0;">
+          <a href="{% url 'view_events' event.id %}" class="eb-btn-primary" style="white-space:nowrap;">View Details</a>
+          {% if user.is_authenticated and event.user == user %}
+          <a href="{% url 'edit_events' event.id %}" class="eb-btn-outline" style="white-space:nowrap;">Edit</a>
+          <a href="{% url 'cancel_events' event.id %}" class="eb-btn-danger" style="white-space:nowrap;">Delete</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="eb-empty">
+      <div class="eb-empty-icon"><i class="bi bi-calendar-x"></i></div>
+      <div class="eb-empty-text">No Upcoming Events</div>
+      <p style="font-size:0.87rem;color:var(--text-3);margin-top:12px;">Check back soon or be the first to create one.</p>
+      {% if user.is_authenticated %}
+      <a href="{% url 'add_events' %}" class="eb-btn-primary" style="margin-top:28px;"><i class="bi bi-plus-lg"></i> Create First Event</a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- FOOTER BAND -->
+<!-- <div style="background:var(--navy);color:rgba(255,255,255,0.5);padding:32px 60px;font-size:0.78rem;letter-spacing:0.05em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+  <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;font-weight:600;">BookMyEvent</span>
+  <span>© 2025 BookMyEvent. All rights reserved.</span>
+</div> -->
+
+<style>
+  @media(max-width:900px){
+    section > div[style*="position:absolute;right"] { display:none !important; }
+    div[style*="display:flex;align-items:stretch"] { flex-direction:column !important; }
+    div[style*="width:100px"] { width:100% !important; flex-direction:row !important; justify-content:center !important; gap:12px !important; padding:14px 20px !important; border-right:none !important; border-bottom:1.5px solid var(--border-2) !important; }
+    div[style*="border-left:1.5px solid var(--border-2);flex-shrink:0"] { flex-direction:row !important; flex-wrap:wrap !important; border-left:none !important; border-top:1.5px solid var(--border-2) !important; padding:16px 20px !important; }
+  }
+</style>
+
+{% endblock %}

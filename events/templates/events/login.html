@@ -1,0 +1,213 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — BookMyEvent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --navy:    #1e3a5f;
+      --navy-2:  #2a4f7c;
+      --amber:   #c47c2a;
+      --amber-l: #d9943a;
+      --cream:   #faf8f4;
+      --stone:   #f3ede3;
+      --stone-2: #e8dfd0;
+      --text:    #1e3a5f;
+      --text-2:  #3d5a80;
+      --text-3:  #7a90a8;
+      --border:  #d8cebc;
+      --border-2:#ece5d8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--cream); font-family: 'Inter', sans-serif; color: var(--text); min-height: 100vh; }
+    h1, h2 { font-family: 'Playfair Display', serif; font-weight: 700; }
+
+    /* LAYOUT */
+    .auth-wrap { display: flex; min-height: 100vh; }
+
+    /* LEFT PHOTO PANEL */
+    .auth-visual {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1400&q=85') center/cover no-repeat;
+      position: relative;
+    }
+    .auth-visual::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(140deg, rgba(30,58,95,0.85) 0%, rgba(30,58,95,0.42) 100%);
+    }
+    .auth-visual-inner {
+      position: relative; z-index: 1; height: 100%;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 52px 60px;
+    }
+    .auth-logo { font-family:'Playfair Display',serif; font-size:1.55rem; font-weight:700; color:#fff; text-decoration:none; }
+    .auth-logo span { color:#e8c97a; }
+
+    .visual-tagline { font-family:'Playfair Display',serif; font-size:clamp(2rem,3.5vw,3.5rem); font-weight:700; color:#fff; line-height:1.1; margin-bottom:18px; }
+    .visual-tagline em { color:#e8c97a; font-style:italic; }
+    .visual-desc { font-size:0.88rem; color:rgba(255,255,255,0.58); line-height:1.75; max-width:360px; margin-bottom:36px; }
+
+    .feature-box { border:1px solid rgba(255,255,255,0.15); border-radius:10px; overflow:hidden; }
+    .feature-row { padding:13px 20px; background:rgba(255,255,255,0.07); border-bottom:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:12px; font-size:0.83rem; color:rgba(255,255,255,0.68); }
+    .feature-row:last-child { border-bottom:none; }
+    .feature-row i { color:#e8c97a; font-size:0.95rem; flex-shrink:0; }
+
+    /* RIGHT FORM PANEL */
+    .auth-panel {
+      width: 520px; flex-shrink:0; background:#fff;
+      border-left: 1.5px solid var(--border-2);
+      display: flex; flex-direction:column; justify-content:center;
+      padding: 72px 60px;
+      box-shadow: -4px 0 32px rgba(30,58,95,0.06);
+    }
+    .panel-eyebrow { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--amber); margin-bottom:10px; }
+    .panel-title { font-size:2.5rem; color:var(--navy); line-height:1.05; margin-bottom:8px; }
+    .panel-sub { font-size:0.85rem; color:var(--text-3); margin-bottom:10px; }
+    .divider { width:48px; height:3px; background:var(--amber); border-radius:2px; margin-bottom:36px; margin-top:6px; }
+
+    /* FORM */
+    .field { margin-bottom:20px; }
+    label { display:block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-2); margin-bottom:8px; }
+    .input-wrap { position:relative; }
+    .input-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-3); font-size:1rem; pointer-events:none; }
+    input[type="text"], input[type="password"], input[type="email"] {
+      width:100%; background:#fff; border:1.5px solid var(--border-2); color:var(--text);
+      padding:13px 16px 13px 42px; border-radius:8px;
+      font-family:'Inter',sans-serif; font-size:0.91rem;
+      transition:border-color 0.2s, box-shadow 0.2s; outline:none;
+    }
+    input:focus { border-color:var(--navy); box-shadow:0 0 0 3px rgba(30,58,95,0.09); }
+    input::placeholder { color:var(--text-3); }
+    .field-error { font-size:0.74rem; color:#b83232; margin-top:6px; display:flex; align-items:center; gap:5px; }
+
+    /* ERROR BANNER */
+    .error-banner {
+      padding:13px 16px; background:#fef2f2; border:1.5px solid rgba(184,50,50,0.3);
+      border-radius:8px; margin-bottom:22px;
+      display:flex; gap:10px; align-items:center; font-size:0.82rem; color:#b83232;
+    }
+
+    /* BUTTONS */
+    .btn-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .btn-primary { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--navy); color:#fff; padding:14px 20px; border-radius:7px; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:600; letter-spacing:0.04em; border:2px solid var(--navy); cursor:pointer; transition:all 0.2s; text-decoration:none; }
+    .btn-primary:hover { background:var(--navy-2); border-color:var(--navy-2); color:#fff; transform:translateY(-1px); box-shadow:0 6px 24px rgba(30,58,95,0.2); }
+    .btn-outline { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:8px; background:transparent; color:var(--navy); padding:13px 20px; border-radius:7px; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:500; border:1.5px solid var(--border); cursor:pointer; transition:all 0.2s; text-decoration:none; }
+    .btn-outline:hover { border-color:var(--navy); background:var(--stone); color:var(--navy); }
+
+    /* DIVIDER LINE */
+    .or-row { display:flex; align-items:center; gap:12px; margin:24px 0 20px; }
+    .or-line { flex:1; height:1px; background:var(--border-2); }
+    .or-text { font-size:0.75rem; color:var(--text-3); font-weight:500; letter-spacing:0.05em; white-space:nowrap; }
+
+    .panel-footer { font-size:0.74rem; color:#b0b8c4; text-align:center; margin-top:36px; line-height:1.7; }
+
+    @media(max-width:900px){
+      .auth-visual { display:none; }
+      .auth-panel { width:100%; padding:60px 28px; border-left:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+
+  <!-- LEFT VISUAL -->
+  <div class="auth-visual">
+    <div class="auth-visual-inner">
+      <a href="/" class="auth-logo">Book<span>MyEvent</span></a>
+      <div>
+        <h2 class="visual-tagline">Your next great<br><em>experience</em> awaits.</h2>
+        <p class="visual-desc">Discover, create, and attend extraordinary events every day — from conferences to cultural celebrations.</p>
+        <div class="feature-box">
+          <div class="feature-row"><i class="bi bi-search"></i>Discover curated local events</div>
+          <div class="feature-row"><i class="bi bi-megaphone"></i>Host and manage your own events</div>
+          <div class="feature-row"><i class="bi bi-people"></i>Connect with your community</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM -->
+  <div class="auth-panel">
+
+    <!-- Mobile logo -->
+    <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--navy);margin-bottom:36px;display:none;" id="mobileLogo">
+      Book<span style="color:var(--amber);">MyEvent</span>
+    </div>
+
+    <p class="panel-eyebrow"><i class="bi bi-lock me-1"></i>Secure Login</p>
+    <h1 class="panel-title">Welcome back</h1>
+    <p class="panel-sub">Sign in to access your events dashboard</p>
+    <div class="divider"></div>
+
+    {% if form.non_field_errors %}
+    <div class="error-banner">
+      <i class="bi bi-exclamation-circle"></i>
+      {{ form.non_field_errors.as_text }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="id_username">Username</label>
+        <div class="input-wrap">
+          <i class="bi bi-person"></i>
+          <input type="text" id="id_username" name="{{ form.username.name }}"
+                 placeholder="Enter your username"
+                 value="{{ form.username.value|default:'' }}" />
+        </div>
+        {% if form.username.errors %}
+        <div class="field-error"><i class="bi bi-exclamation-circle"></i>{{ form.username.errors.as_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="field" style="margin-bottom:28px;">
+        <label for="id_password">Password</label>
+        <div class="input-wrap">
+          <i class="bi bi-lock"></i>
+          <input type="password" id="id_password" name="{{ form.password.name }}"
+                 placeholder="Enter your password" />
+        </div>
+        {% if form.password.errors %}
+        <div class="field-error"><i class="bi bi-exclamation-circle"></i>{{ form.password.errors.as_text }}</div>
+        {% endif %}
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-primary">Sign In &nbsp;<i class="bi bi-arrow-right"></i></button>
+        <a href="{% url 'register' %}" class="btn-outline">Create Account</a>
+      </div>
+    </form>
+
+    <div class="or-row">
+      <span class="or-line"></span>
+      <span class="or-text">Don't have an account?</span>
+      <span class="or-line"></span>
+    </div>
+    <a href="{% url 'register' %}" style="display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.83rem;color:var(--amber);font-weight:600;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--amber-l)'" onmouseout="this.style.color='var(--amber)'">
+      <i class="bi bi-person-plus"></i> Create a free account
+    </a>
+
+    <p class="panel-footer">
+      By signing in you agree to our Terms of Service<br>and Privacy Policy.
+    </p>
+  </div>
+
+</div>
+
+<script>
+  const ml = document.getElementById('mobileLogo');
+  function checkW(){ ml.style.display = window.innerWidth <= 900 ? 'block' : 'none'; }
+  checkW(); window.addEventListener('resize', checkW);
+</script>
+
+</body>
+</html>

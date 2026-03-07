@@ -1,0 +1,111 @@
+{% extends "events/layout.html" %}
+{% block title %}Register — {{ event.title }}{% endblock %}
+{% block content %}
+
+<div style="display:flex;min-height:calc(100vh - 68px);">
+
+  <!-- LEFT EVENT INFO PANEL -->
+  <div style="
+    flex:1; min-width:0;
+    background: url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&q=85') center/cover no-repeat;
+    position:relative; display:flex; flex-direction:column; justify-content:flex-end; padding:60px;
+  " class="d-none d-lg-flex">
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(30,58,95,0.9) 0%, rgba(30,58,95,0.4) 70%, transparent 100%);"></div>
+    <div style="position:relative;z-index:1;">
+      <div class="eb-badge" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:#fff;margin-bottom:24px;">
+        <span class="eb-badge-dot" style="background:#fff;"></span> Registration Open
+      </div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:#fff;line-height:1.1;margin-bottom:24px;">
+        {{ event.title }}
+      </h2>
+      <div style="height:2px;width:48px;background:#e8c97a;margin-bottom:28px;"></div>
+
+      <!-- Event details -->
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:40px;">
+        <div style="display:flex;align-items:center;gap:14px;color:rgba(255,255,255,0.75);font-size:0.88rem;">
+          <div style="width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-calendar3" style="color:#e8c97a;"></i>
+          </div>
+          {{ event.date }}
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;color:rgba(255,255,255,0.75);font-size:0.88rem;">
+          <div style="width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-geo-alt" style="color:#e8c97a;"></i>
+          </div>
+          {{ event.location }}
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;font-size:0.88rem;">
+          <div style="width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-people" style="color:#e8c97a;"></i>
+          </div>
+          <div>
+            <span style="color:rgba(255,255,255,0.75);">{{ event.num_participants }}/{{ event.max_participants }} seats filled</span>
+            <div style="height:3px;background:rgba(255,255,255,0.15);border-radius:2px;margin-top:8px;width:160px;">
+              <div style="height:100%;background:#e8c97a;border-radius:2px;width:{% widthratio event.num_participants event.max_participants 100 %}%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;">
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);line-height:1.6;margin:0;">
+          Spots are limited. Complete your registration to secure your place at this event.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT REGISTRATION FORM -->
+  <div style="
+    width:520px; flex-shrink:0; background:#fff;
+    border-left:1.5px solid var(--border-2);
+    padding:72px 52px; overflow-y:auto;
+    display:flex; flex-direction:column; justify-content:center;
+  ">
+    <div style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:var(--stone);border-radius:12px;margin-bottom:24px;">
+      <i class="bi bi-ticket-perforated" style="font-size:1.5rem;color:var(--navy);"></i>
+    </div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--navy);margin-bottom:6px;">Reserve Your Spot</h1>
+    <p style="font-size:0.82rem;color:var(--text-3);margin-bottom:10px;">Registering for: <strong style="color:var(--amber);">{{ event.title }}</strong></p>
+    <div class="eb-divider" style="margin-bottom:36px;"></div>
+
+    <form action="{% url 'register_events' event.id %}" method="POST">
+      {% csrf_token %}
+
+      <div class="eb-field">
+        <label class="eb-label">Full Name</label>
+        <input type="text" class="eb-input" name="name" placeholder="Enter your full name" required />
+      </div>
+
+      <div class="eb-field">
+        <label class="eb-label">Email Address</label>
+        <input type="email" class="eb-input" name="email" placeholder="you@example.com" required />
+      </div>
+
+      <div style="padding:16px 20px;background:var(--stone);border:1.5px solid var(--border-2);border-radius:8px;margin-bottom:28px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <i class="bi bi-shield-check" style="color:var(--amber);flex-shrink:0;margin-top:2px;"></i>
+          <p style="font-size:0.8rem;color:var(--text-3);line-height:1.6;margin:0;">
+            Your information will only be shared with the event organiser and kept strictly confidential.
+          </p>
+        </div>
+      </div>
+
+      <button type="submit" class="eb-btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:0.88rem;margin-bottom:12px;">
+        <i class="bi bi-check-circle"></i> Confirm Registration
+      </button>
+      <a href="{% url 'view_events' event.id %}" class="eb-btn-outline" style="width:100%;justify-content:center;">
+        <i class="bi bi-arrow-left"></i> Back to Event
+      </a>
+    </form>
+  </div>
+</div>
+
+<style>
+  @media(max-width:900px){
+    div[style*="flex:1; min-width:0"] { display:none !important; }
+    div[style*="width:520px"] { width:100%; padding:60px 24px; border-left:none; }
+  }
+</style>
+
+{% endblock %}

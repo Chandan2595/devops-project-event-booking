@@ -1,0 +1,90 @@
+{% extends "events/layout.html" %}
+{% block title %}Past Events — BookMyEvent{% endblock %}
+{% block content %}
+
+<!-- HEADER -->
+<div style="
+  min-height:46vh;
+  background: url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1800&q=85') center/cover no-repeat;
+  position:relative; display:flex; align-items:flex-end;
+">
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(250,248,244,0.96) 0%,rgba(250,248,244,0.5) 50%,rgba(250,248,244,0.1) 100%);"></div>
+  <div style="position:relative;z-index:1;padding:0 60px 56px;width:100%;">
+    <div class="eb-badge" style="margin-bottom:20px;"><i class="bi bi-archive me-1"></i> Archive</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:700;color:var(--navy);line-height:1.05;margin-bottom:16px;">
+      Past <em style="color:var(--amber);font-style:italic;">Events</em>
+    </h1>
+    <p style="font-size:0.92rem;color:var(--text-2);max-width:480px;line-height:1.7;letter-spacing:0.02em;">
+      A record of events that connected communities and created lasting memories.
+    </p>
+  </div>
+</div>
+
+<!-- EVENTS GRID -->
+<section style="background:var(--cream);padding:0 60px 80px;">
+
+  <div style="padding:48px 0 32px;border-bottom:1.5px solid var(--border-2);margin-bottom:40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;color:var(--navy);">Event Archive</h2>
+    <a href="{% url 'events' %}" class="eb-btn-outline"><i class="bi bi-calendar-day"></i> View Upcoming Events</a>
+  </div>
+
+  {% if events %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
+    {% for event in events %}
+    <div style="
+      background:#fff;border:1.5px solid var(--border-2);border-radius:12px;overflow:hidden;
+      display:flex;flex-direction:column;box-shadow:var(--shadow);
+      transition:all 0.25s;opacity:0.85;
+    "
+    onmouseover="this.style.opacity='1';this.style.boxShadow='0 8px 40px rgba(30,58,95,0.12)';"
+    onmouseout="this.style.opacity='0.85';this.style.boxShadow='0 2px 20px rgba(30,58,95,0.07)';">
+
+      <!-- Top accent with past-event styling -->
+      <div style="height:4px;background:linear-gradient(90deg,#7a90a8,#b8a898);"></div>
+
+      <div style="padding:28px 28px 20px;">
+        <!-- Date badge -->
+        <div style="display:inline-flex;align-items:center;gap:8px;background:var(--stone);border:1px solid var(--border-2);border-radius:6px;padding:6px 12px;margin-bottom:16px;">
+          <i class="bi bi-calendar3" style="color:var(--text-3);font-size:0.8rem;"></i>
+          <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);">{{ event.date|date:"F j, Y" }}</span>
+        </div>
+
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--text-2);margin-bottom:12px;line-height:1.3;">{{ event.title }}</h3>
+
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.81rem;color:var(--text-3);">
+          <span style="display:flex;align-items:center;gap:8px;"><i class="bi bi-geo-alt"></i>{{ event.location }}</span>
+          <span style="display:flex;align-items:center;gap:8px;"><i class="bi bi-clock"></i>{{ event.date|time:"g:i A" }}</span>
+        </div>
+      </div>
+
+      <div style="padding:0 28px 24px;margin-top:auto;">
+        <div style="height:1px;background:var(--border-2);margin-bottom:18px;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:0.72rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-3);background:var(--stone);padding:4px 10px;border-radius:4px;">Concluded</span>
+          <a href="{% url 'view_events' event.id %}" class="eb-btn-outline" style="padding:8px 18px;font-size:0.78rem;">
+            View <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="eb-empty" style="padding:80px 0;">
+    <div class="eb-empty-icon"><i class="bi bi-hourglass"></i></div>
+    <div class="eb-empty-text">No Past Events</div>
+    <p style="font-size:0.87rem;color:var(--text-3);margin-top:12px;">The archive is currently empty.</p>
+  </div>
+  {% endif %}
+
+</section>
+
+<style>
+  @media(max-width:640px){
+    section[style*="padding:0 60px"] { padding:0 24px 60px !important; }
+    div[style*="display:grid"] { grid-template-columns:1fr !important; }
+  }
+</style>
+
+{% endblock %}
