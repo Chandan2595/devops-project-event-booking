@@ -12,7 +12,7 @@ class Event(models.Model):
     max_participants = models.IntegerField(default=5)
     num_participants = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self):               
         return self.title
 
 
@@ -22,4 +22,4 @@ class Participant(models.Model):
     events = models.ManyToManyField(Event, related_name="participants")
 
     def __str__(self):
-        return self.name
+        return self.name            

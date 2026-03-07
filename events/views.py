@@ -1,4 +1,3 @@
-"""Import all packages here"""
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
