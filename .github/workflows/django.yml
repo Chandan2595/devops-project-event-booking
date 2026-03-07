@@ -69,7 +69,7 @@ jobs:
           # pylint $(git ls-files '*.py') --ignore=migrations || true
           pylint $(git ls-files '*.py' | grep -v migrations) || true
       
-      - name: Run tests with coverage
+      - name: Run django tests
         run: |
           coverage run --source='.' manage.py test  # Add --source flag
           coverage xml -i  # -i ignores errors

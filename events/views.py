@@ -1,3 +1,5 @@
+"""All views here"""
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -5,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from events.models import Event, Participant
+from django.contrib.auth.forms import AuthenticationForm
 
 def register_view(request): # pylint: disable=missing-function-docstring
     if request.method == "POST":
@@ -17,12 +20,6 @@ def register_view(request): # pylint: disable=missing-function-docstring
         initial_data = {"username": "", "password1": "", "password2": ""}
         form = UserCreationForm(initial=initial_data)
     return render(request, "events/register.html", {"form": form})
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
-
 
 def login_view(request):
     if request.method == "POST":
