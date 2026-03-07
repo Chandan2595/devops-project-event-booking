@@ -42,7 +42,7 @@ jobs:
 
   stage2_build_and_test:
     runs-on: ubuntu-latest
-    needs: prebuild
+    needs: stage1_prebuild
 
     steps:
       - name: Checkout repo
@@ -134,7 +134,7 @@ jobs:
 
   stage3_deploy:
     runs-on: ubuntu-latest
-    needs: build_and_test
+    needs: stage2_build_and_test
 
     steps:
       - name: Download artifact
