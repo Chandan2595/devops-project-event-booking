@@ -46,10 +46,6 @@ def logout_view(request): # pylint: disable=missing-function-docstring
     return redirect("login")
 
 
-
-###############################################################
-
-
 def events(request): # pylint: disable=missing-function-docstring
     # events = Event.objects.all()
     all_events = Event.objects.filter(date__gte=timezone.now()).order_by("date") # pylint: disable=no-member
