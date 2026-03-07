@@ -88,8 +88,8 @@ def register_events(request, event_id): # pylint: disable=missing-function-docst
         return redirect("events")
     return render(request, "events/register_events.html", {"event": event})
 
-
-def add_events(request): # pylint: disable=missing-function-docstring
+@login_required
+def add_events(request):  # pylint: disable=missing-function-docstring
     if request.method == "POST":
         event = Event()
         event.title = request.POST.get("title")
@@ -99,6 +99,7 @@ def add_events(request): # pylint: disable=missing-function-docstring
         event.max_participants = request.POST.get("max_participants")
         event.user = request.user
         event.save()
+
         messages.success(request, "Event Creation Successful!")
         return redirect("events")
     return render(request, "events/add_events.html", {})
