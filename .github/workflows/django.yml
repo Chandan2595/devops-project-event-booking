@@ -66,8 +66,8 @@ jobs:
         continue-on-error: true
         run: |
           # pylint events --ignore=migrations || true
-          pylint $(git ls-files '*.py') --ignore=migrations || true
-
+          # pylint $(git ls-files '*.py') --ignore=migrations || true
+          pylint $(git ls-files '*.py' | grep -v migrations) || true
       
       - name: Run tests with coverage
         run: |

@@ -1,3 +1,4 @@
+"""admin here"""
 from django.contrib import admin
 from .models import Event, Participant
 # Register your models here.
