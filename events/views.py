@@ -7,9 +7,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from events.models import Event, Participant
-from django.contrib.auth.forms import AuthenticationForm
 
 def register_view(request):
+    """registration view"""
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -22,6 +22,7 @@ def register_view(request):
     return render(request, "events/register.html", {"form": form})
 
 def login_view(request):
+    """login view"""
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
 
@@ -116,7 +117,7 @@ def edit_events(request, event_id): # pylint: disable=missing-function-docstring
         return redirect("events")
     else:
         context = {"event": event}
-    return render(request, "events/edit_events.html", context)
+        return render(request, "events/edit_events.html", context)
 
 
 def cancel_events(request, event_id): # pylint: disable=missing-function-docstring
