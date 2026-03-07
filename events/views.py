@@ -115,9 +115,6 @@ def edit_events(request, event_id): # pylint: disable=missing-function-docstring
         event.save()
         messages.success(request, "Edit Event Successful!")
         return redirect("events")
-    else:
-        context = {"event": event}
-        return render(request, "events/edit_events.html", context)
 
 
 def cancel_events(request, event_id): # pylint: disable=missing-function-docstring
