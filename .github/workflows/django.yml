@@ -6,10 +6,8 @@ on:
       - main
 
 jobs:
-  # =====================================================================
-  # 1️⃣ PRE-BUILD STAGE (Sonar, Java, Dependencies)
-  # =====================================================================
-  prebuild:
+
+  stage1_prebuild:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,10 +40,7 @@ jobs:
           echo "Java version: $(java --version)"
           echo "Java installation done"
 
-  # =====================================================================
-  # 2️⃣ BUILD + TEST STAGE (Sonar Scan, Pylint, Django Tests)
-  # =====================================================================
-  build_and_test:
+  stage2_build_and_test:
     runs-on: ubuntu-latest
     needs: prebuild
 
@@ -70,14 +65,9 @@ jobs:
       - name: Run Pylint
         continue-on-error: true
         run: |
-          pylint events --ignore=migrations || true
+          # pylint events --ignore=migrations || true
+          pylint $(git ls-files '*.py') --ignore=migrations || true
 
-      # -------------------------
-      # Django Unit Tests
-      # -------------------------
-      # - name: Run Django Tests
-      #   run: |
-      #     python manage.py test
       
       - name: Run tests with coverage
         run: |
@@ -141,11 +131,8 @@ jobs:
           name: deploy-package
           path: deploy.zip
           retention-days: 5
-          
-  # # =====================================================================
-  # # 3️⃣ DEPLOYMENT STAGE (AWS Elastic Beanstalk)
-  # # =====================================================================
-  deploy:
+
+  stage3_deploy:
     runs-on: ubuntu-latest
     needs: build_and_test
 
