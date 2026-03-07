@@ -65,9 +65,7 @@ jobs:
       - name: Run Pylint
         continue-on-error: true
         run: |
-          # pylint events --ignore=migrations || true
-          # pylint $(git ls-files '*.py') --ignore=migrations || true
-          pylint $(git ls-files '*.py' | grep -v migrations,.c9) || true
+          pylint $(git ls-files '*.py' | grep -Ev 'migrations|\.c9') || true
       
       - name: Run django tests
         run: |
