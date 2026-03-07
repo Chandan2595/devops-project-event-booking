@@ -83,9 +83,9 @@ jobs:
 
       - name: Run Sonar Cloud Scan
         env:
-          SONAR_TOKEN: d7c1e84f677452db54e9eaa4335fa37301a12c0f
-          SONAR_PROJECT_KEY: Chandan2595_devops-project-event-booking
-          SONAR_ORG: chandan2595
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_ORG: ${{ secrets.SONAR_ORG }}
         run: |
           sonar-scanner \
             -Dsonar.login=$SONAR_TOKEN \
