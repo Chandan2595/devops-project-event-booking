@@ -94,7 +94,16 @@
           <a href="{% url 'view_events' event.id %}" class="eb-btn-primary" style="white-space:nowrap;">View Details</a>
           {% if user.is_authenticated and event.user == user %}
           <a href="{% url 'edit_events' event.id %}" class="eb-btn-outline" style="white-space:nowrap;">Edit</a>
-          <a href="{% url 'cancel_events' event.id %}" class="eb-btn-danger" style="white-space:nowrap;">Delete</a>
+          
+          
+          <a href="javascript:void(0);" 
+             onclick="if(confirm('Are you sure you want to delete this event? This action cannot be undone.')) { window.location='{% url 'cancel_events' event.id %}'; }" 
+             class="eb-btn-danger" 
+             style="white-space:nowrap;">
+             Delete
+          </a>
+          
+          
           {% endif %}
         </div>
       </div>
